@@ -24,7 +24,7 @@
     <script>
         async function fetchData() {
             try {
-                const response = await fetch('http://127.0.0.1:5000/data');
+                const response = await fetch('https://manikumar1.pythonanywhere.com/data');
                 const data = await response.json();
                 createChart(data);
             } catch (error) {
