@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top 10 Programming Languages (Stack Overflow)</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        canvas {
+            max-width: 90%;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Top 10 Programming Languages (2023-2025)</h1>
+    <canvas id="myChart"></canvas>
+
+    <script>
+        async function fetchData() {
+            try {
+                const response = await fetch('http://127.0.0.1:5000/data');
+                const data = await response.json();
+                createChart(data);
+            } catch (error) {
+                console.error("Error loading chart:", error);
+            }
+        }
+
+        function createChart(data) {
+            const ctx = document.getElementById('myChart').getContext('2d');
+            
+            const datasets = data.tags.map((tag, index) => ({
+                label: tag,
+                data: data.data[tag],
+                borderColor: `hsl(${index * 36}, 70%, 50%)`,
+                backgroundColor: `hsl(${index * 36}, 70%, 70%)`,
+                fill: false,
+                tension: 0
+            }));
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.years,
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: { title: { display: true, text: "Year" } },
+                        y: { title: { display: true, text: "Percentage of Questions" }, beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        fetchData();
+    </script>
+
+</body>
+</html>
